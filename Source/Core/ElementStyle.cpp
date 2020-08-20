@@ -41,8 +41,6 @@
 #include "../../Include/RmlUi/Core/StyleSheet.h"
 #include "../../Include/RmlUi/Core/StyleSheetSpecification.h"
 #include "../../Include/RmlUi/Core/TransformPrimitive.h"
-#include "ElementBackground.h"
-#include "ElementBorder.h"
 #include "ElementDecoration.h"
 #include "ElementDefinition.h"
 #include "ComputeProperty.h"
@@ -603,6 +601,7 @@ PropertyIdSet ElementStyle::ComputeValues(Style::ComputedValues& values, const S
 		values.text_decoration = parent_values->text_decoration;
 		values.text_transform = parent_values->text_transform;
 		values.white_space = parent_values->white_space;
+		values.word_break = parent_values->word_break;
 
 		values.cursor = parent_values->cursor;
 		values.focus = parent_values->focus;
@@ -676,6 +675,19 @@ PropertyIdSet ElementStyle::ComputeValues(Style::ComputedValues& values, const S
 			break;
 		case PropertyId::BorderLeftColor:
 			values.border_left_color = p->Get<Colourb>();
+			break;
+
+		case PropertyId::BorderTopLeftRadius:
+			values.border_top_left_radius = ComputeLength(p, font_size, document_font_size, dp_ratio);
+			break;
+		case PropertyId::BorderTopRightRadius:
+			values.border_top_right_radius = ComputeLength(p, font_size, document_font_size, dp_ratio);
+			break;
+		case PropertyId::BorderBottomRightRadius:
+			values.border_bottom_right_radius = ComputeLength(p, font_size, document_font_size, dp_ratio);
+			break;
+		case PropertyId::BorderBottomLeftRadius:
+			values.border_bottom_left_radius = ComputeLength(p, font_size, document_font_size, dp_ratio);
 			break;
 
 		case PropertyId::Display:
@@ -790,6 +802,9 @@ PropertyIdSet ElementStyle::ComputeValues(Style::ComputedValues& values, const S
 			break;
 		case PropertyId::WhiteSpace:
 			values.white_space = (WhiteSpace)p->Get< int >();
+			break;
+		case PropertyId::WordBreak:
+			values.word_break = (WordBreak)p->Get< int >();
 			break;
 
 		case PropertyId::Cursor:

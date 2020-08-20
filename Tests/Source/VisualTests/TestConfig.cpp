@@ -15,7 +15,7 @@
  *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,45 +26,41 @@
  *
  */
 
-#ifndef RMLUI_CORE_ELEMENTBACKGROUND_H
-#define RMLUI_CORE_ELEMENTBACKGROUND_H
+#include "TestConfig.h"
+#include <Shell.h>
+#include <RmlUi/Core/Types.h>
+#include <RmlUi/Core/StringUtilities.h>
 
-#include "../../Include/RmlUi/Core/Geometry.h"
 
-namespace Rml {
-
-class Box;
-class Element;
-
-/**
-	@author Peter Curry
- */
-
-class ElementBackground
+Rml::String GetCompareInputDirectory()
 {
-public:
-	ElementBackground(Element* element);
-	~ElementBackground();
-
-	/// Renders the element's border, if it has one.
-	void RenderBackground();
-
-	/// Marks the border geometry as dirty.
-	void DirtyBackground();
-
-private:
-	// Generates the border geometry for the element.
-	void GenerateBackground();
-	// Generates the border geometry for a single box.
-	void GenerateBackground(Vertex*& vertices, int*& indices, int& index_offset, const Box& box, const Colourb& colour);
-
-	Element* element;
-
-	// The background geometry.
-	Geometry geometry;
-
-	bool background_dirty;
-};
-
-} // namespace Rml
+#ifdef RMLUI_VISUAL_TESTS_COMPARE_DIRECTORY
+	const Rml::String input_directory = Rml::String(RMLUI_VISUAL_TESTS_COMPARE_DIRECTORY);
+#else
+	const Rml::String input_directory = Shell::FindSamplesRoot() + "../Tests/Output";
 #endif
+	return input_directory;
+}
+
+Rml::String GetCaptureOutputDirectory()
+{
+#ifdef RMLUI_VISUAL_TESTS_CAPTURE_DIRECTORY
+	const Rml::String output_directory = Rml::String(RMLUI_VISUAL_TESTS_CAPTURE_DIRECTORY);
+#else
+	const Rml::String output_directory = Shell::FindSamplesRoot() + "../Tests/Output";
+#endif
+	return output_directory;
+}
+
+Rml::StringList GetTestInputDirectories()
+{
+	const Rml::String samples_root = Shell::FindSamplesRoot();
+
+	Rml::StringList directories = { samples_root + "../Tests/Data/VisualTests" };
+
+#ifdef RMLUI_VISUAL_TESTS_RML_DIRECTORIES
+	Rml::StringUtilities::ExpandString(directories, RMLUI_VISUAL_TESTS_RML_DIRECTORIES, ';');
+#endif
+
+	return directories;
+}

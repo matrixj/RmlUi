@@ -48,19 +48,19 @@ class Decorator;
 class ElementInstancer;
 class EventDispatcher;
 class EventListener;
-class ElementBackground;
-class ElementBorder;
 class ElementDecoration;
 class ElementDefinition;
 class ElementDocument;
 class ElementScroll;
 class ElementStyle;
+class LayoutEngine;
+class LayoutInlineBox;
+class LayoutBlockBox;
 class PropertiesIteratorView;
-class FontFaceHandleDefault;
 class PropertyDictionary;
 class RenderInterface;
-class TransformState;
 class StyleSheet;
+class TransformState;
 struct ElementMeta;
 
 /**
@@ -469,8 +469,12 @@ public:
 	/// @param[in] event Event to attach to.
 	/// @param[in] listener The listener object to be attached.
 	/// @param[in] in_capture_phase True to attach in the capture phase, false in bubble phase.
+	/// @lifetime The added listener must stay alive until after the dispatched call from EventListener::OnDetach(). This occurs
+	///     eg. when the element is destroyed or when RemoveEventListener() is called with the same parameters passed here.
 	void AddEventListener(const String& event, EventListener* listener, bool in_capture_phase = false);
 	/// Adds an event listener to this element by id.
+	/// @lifetime The added listener must stay alive until after the dispatched call from EventListener::OnDetach(). This occurs
+	///     eg. when the element is destroyed or when RemoveEventListener() is called with the same parameters passed here.
 	void AddEventListener(EventId id, EventListener* listener, bool in_capture_phase = false);
 	/// Removes an event listener from this element.
 	/// @param[in] event Event to detach from.
@@ -549,10 +553,6 @@ public:
 	EventDispatcher* GetEventDispatcher() const;
 	/// Returns event types with number of listeners for debugging.
 	String GetEventDispatcherSummary() const;
-	/// Access the element background.
-	ElementBackground* GetElementBackground() const;
-	/// Access the element border.
-	ElementBorder* GetElementBorder() const;
 	/// Access the element decorators.
 	ElementDecoration* GetElementDecoration() const;
 	/// Returns the element's scrollbar functionality.
@@ -640,6 +640,7 @@ private:
 
 	void DirtyOffset();
 	void UpdateOffset();
+	void SetBaseline(float baseline);
 
 	void BuildLocalStackingContext();
 	void BuildStackingContext(ElementList* stacking_context);
@@ -718,6 +719,8 @@ private:
 	// Defines what box area represents the element's client area; this is usually padding, but may be content.
 	Box::Area client_area;
 
+	float baseline;
+
 	// True if the element is visible and active.
 	bool visible;
 
@@ -751,11 +754,12 @@ private:
 
 	ElementMeta* meta;
 
-	friend class Context;
-	friend class ElementStyle;
-	friend class LayoutEngine;
-	friend class LayoutInlineBox;
-	friend class ElementScroll;
+	friend class Rml::Context;
+	friend class Rml::ElementStyle;
+	friend class Rml::LayoutEngine;
+	friend class Rml::LayoutBlockBox;
+	friend class Rml::LayoutInlineBox;
+	friend class Rml::ElementScroll;
 };
 
 } // namespace Rml

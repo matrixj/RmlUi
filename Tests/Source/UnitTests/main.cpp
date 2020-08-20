@@ -15,7 +15,7 @@
  *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,45 +26,7 @@
  *
  */
 
-#ifndef RMLUI_CORE_ELEMENTBORDER_H
-#define RMLUI_CORE_ELEMENTBORDER_H
+#define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
+#include <doctest.h>
 
-#include "../../Include/RmlUi/Core/Geometry.h"
-
-namespace Rml {
-
-class Box;
-class Element;
-
-/**
-	@author Peter Curry
- */
-
-class ElementBorder
-{
-public:
-	ElementBorder(Element* element);
-	~ElementBorder();
-
-	/// Renders the element's border, if it has one.
-	void RenderBorder();
-
-	/// Marks the border geometry as dirty.
-	void DirtyBorder();
-
-private:
-	// Generates the border geometry for the element.
-	void GenerateBorder();
-	// Generates the border geometry for a single box.
-	void GenerateBorder(Vertex*& vertices, int*& indices, int& index_offset, const Box& box, const Colourb* colours);
-
-	Element* element;
-
-	// The border geometry.
-	Geometry geometry;
-
-	bool border_dirty;
-};
-
-} // namespace Rml
-#endif
+#include "../Common/TestsInterface.cpp"

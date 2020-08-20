@@ -113,6 +113,7 @@ enum class TextAlign : uint8_t { Left, Right, Center, Justify };
 enum class TextDecoration : uint8_t { None, Underline, Overline, LineThrough };
 enum class TextTransform : uint8_t { None, Capitalize, Uppercase, Lowercase };
 enum class WhiteSpace : uint8_t { Normal, Pre, Nowrap, Prewrap, Preline };
+enum class WordBreak : uint8_t { Normal, BreakAll, BreakWord };
 
 enum class Drag : uint8_t { None, Drag, DragDrop, Block, Clone };
 enum class TabIndex : uint8_t { None, Auto };
@@ -138,6 +139,7 @@ struct ComputedValues
 	Padding padding_top, padding_right, padding_bottom, padding_left;
 	float border_top_width = 0, border_right_width = 0, border_bottom_width = 0, border_left_width = 0;
 	Colourb border_top_color{ 255, 255, 255 }, border_right_color{ 255, 255, 255 }, border_bottom_color{ 255, 255, 255 }, border_left_color{ 255, 255, 255 };
+	float border_top_left_radius = 0, border_top_right_radius = 0, border_bottom_right_radius = 0, border_bottom_left_radius = 0;
 
 	Display display = Display::Inline;
 	Position position = Position::Static;
@@ -184,6 +186,7 @@ struct ComputedValues
 	TextDecoration text_decoration = TextDecoration::None;
 	TextTransform text_transform = TextTransform::None;
 	WhiteSpace white_space = WhiteSpace::Normal;
+	WordBreak word_break = WordBreak::Normal;
 
 	String cursor;
 
