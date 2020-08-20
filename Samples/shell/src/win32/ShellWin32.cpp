@@ -134,16 +134,17 @@ bool Shell::Initialise()
 	file_interface = Rml::MakeUnique<ShellFileInterface>(root);
 	Rml::SetFileInterface(file_interface.get());
 
-	// See if we have Per Monitor V2 DPI awareness. Requires Windows 10, version 1703.
-	procSetProcessDpiAwarenessContext = (ProcSetProcessDpiAwarenessContext)GetProcAddress(
+	// See if we have Per Monitor V2 DPI awareness. Requires Windows 10, version 1703. 
+	// Cast function pointers to void* first for MinGW not to emit errors.
+	procSetProcessDpiAwarenessContext = (ProcSetProcessDpiAwarenessContext)(void*)GetProcAddress(
 		GetModuleHandle(TEXT("User32.dll")),
 		"SetProcessDpiAwarenessContext"
 	);
-	procGetDpiForWindow = (ProcGetDpiForWindow)GetProcAddress(
+	procGetDpiForWindow = (ProcGetDpiForWindow)(void*)GetProcAddress(
 		GetModuleHandle(TEXT("User32.dll")),
 		"GetDpiForWindow"
 	);
-	procAdjustWindowRectExForDpi = (ProcAdjustWindowRectExForDpi)GetProcAddress(
+	procAdjustWindowRectExForDpi = (ProcAdjustWindowRectExForDpi)(void*)GetProcAddress(
 		GetModuleHandle(TEXT("User32.dll")),
 		"AdjustWindowRectExForDpi"
 	);

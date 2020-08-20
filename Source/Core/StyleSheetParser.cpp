@@ -84,7 +84,7 @@ private:
 
 	PropertyDictionary properties;
 	PropertySpecification specification;
-	PropertyId id_rx, id_ry, id_rw, id_rh, id_scale, id_rectangles_scale;
+	PropertyId id_rx, id_ry, id_rw, id_rh, id_scale;
 	ShorthandId id_rectangle;
 
 public:
