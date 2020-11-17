@@ -32,11 +32,11 @@
 #include "Header.h"
 #include <RmlUi/Core/Types.h>
 
+namespace Rml { class ElementDocument; }
 typedef struct lua_State lua_State;
 
 namespace Rml {
 namespace Lua {
-
 
 namespace Interpreter {
     /**
@@ -48,18 +48,20 @@ namespace Interpreter {
 
     /** This function calls luaL_loadfile and then lua_pcall, reporting the errors (if any)
     @param[in] file Fully qualified file name to execute.
+    @param[in] document Document that is loading this file, will be added to the global variable 'document'.
     @remark Somewhat misleading name if you are used to the Lua meaning of "load file". It behaves
     exactly as luaL_dofile does.            */
-    RMLUILUA_API bool LoadFile(const String& file);
+    RMLUILUA_API bool LoadFile(const String& file, ElementDocument* document = nullptr);
     /** Calls lua_dostring and reports the errors.
     @param[in] code String to execute
-    @param[in] name Name for the code that will show up in the Log  */
-    RMLUILUA_API bool DoString(const String& code, const String& name = "");
+    @param[in] name Name for the code that will show up in the Log
+    @param[in] document Document that is running this script, will be added to the global variable 'document'.  */
+    RMLUILUA_API bool DoString(const String& code, const String& name, ElementDocument* document = nullptr);
     /** Same as DoString, except does NOT call pcall on it. It will leave the compiled (but not executed) string
     on top of the stack. It behaves exactly like luaL_loadstring, but you get to specify the name
     @param[in] code String to compile
     @param[in] name Name for the code that will show up in the Log    */
-    RMLUILUA_API bool LoadString(const String& code, const String& name = "");
+    RMLUILUA_API bool LoadString(const String& code, const String& name);
 
     /** Clears all of the items on the stack, and pushes the function from funRef on top of the stack. Only use
     this if you used lua_ref instead of luaL_ref

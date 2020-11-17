@@ -28,7 +28,7 @@ Options = Options or {}
 
 if Options.datamodel == nil then
 	-- Create a new data model
-	Options.datamodel = rmlui.contexts["main"]:OpenDataModel("options", {
+	Options.datamodel = document.context:OpenDataModel("options", {
 		graphics = 'ok',
 		options_changed = false,
 	})

@@ -52,8 +52,14 @@ static int ErrorHandler(lua_State* L)
     return 1;
 }
 
-static bool LuaCall(lua_State* L, int nargs, int nresults)
+static bool LuaCall(lua_State* L, int nargs, int nresults, ElementDocument* document)
 {
+    if (document)
+    {
+        LuaType<ElementDocument>::push(L, document, false);
+		lua_setglobal(L, "document");
+    }
+
     int errfunc = -2 - nargs;
     lua_pushcfunction(L, ErrorHandler);
     lua_insert(L, errfunc);
@@ -64,6 +70,13 @@ static bool LuaCall(lua_State* L, int nargs, int nresults)
         return false;
     }
     lua_remove(L, -1 - nresults);
+
+    if (document)
+    {
+        lua_pushnil(L);
+        lua_setglobal(L, "document");
+    }
+
     return true;
 }
 
@@ -72,7 +85,7 @@ lua_State* Interpreter::GetLuaState()
     return LuaPlugin::GetLuaState();
 }
 
-bool Interpreter::LoadFile(const String& file)
+bool Interpreter::LoadFile(const String& file, ElementDocument* document)
 {
     lua_State* L = GetLuaState();
 
@@ -87,6 +100,7 @@ bool Interpreter::LoadFile(const String& file)
     size_t size = file_interface->Length(handle);
     if (size == 0) {
         Log::Message(Log::LT_WARNING, "LoadFile: File is 0 bytes in size: %s", file.c_str());
+        file_interface->Close(handle);
         return false;
     }
     UniquePtr<char[]> file_contents(new char[size]);
@@ -99,13 +113,13 @@ bool Interpreter::LoadFile(const String& file)
         lua_pop(L, 1);
         return false;
     }
-    return LuaCall(L, 0, 0);;
+    return LuaCall(L, 0, 0, document);
 }
 
-bool Interpreter::DoString(const String& code, const String& name)
+bool Interpreter::DoString(const String& code, const String& name, ElementDocument* document)
 {
     lua_State* L = GetLuaState();
-    return LoadString(code, name) && LuaCall(L, 0, 0);
+    return LoadString(code, name) && LuaCall(L, 0, 0, document);
 }
 
 bool Interpreter::LoadString(const String& code, const String& name)
@@ -134,7 +148,7 @@ void Interpreter::BeginCall(int funRef)
 bool Interpreter::ExecuteCall(int params, int res)
 {
     lua_State* L = GetLuaState();
-    return LuaCall(L, params, res);
+    return LuaCall(L, params, res, nullptr);
 }
 
 void Interpreter::EndCall(int res)
