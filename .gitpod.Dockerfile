@@ -11,4 +11,4 @@ USER gitpod
 #
 # More information: https://www.gitpod.io/docs/config-docker/
 RUN sudo apt-get update -q && \
-    sudo apt-get install -y lua-leg-dev
+    sudo apt-get install -yq lua-leg-dev
