@@ -12,4 +12,4 @@ USER gitpod
 # More information: https://www.gitpod.io/docs/config-docker/
 RUN sudo apt-get update -q ; \
     sudo wget https://www.lua.org/ftp/lua-5.4.1.tar.gz && tar xvf lua-5.4.1.tar.gz && cd lua-5.4.1 && make -j && sudo make install; \
-    sudo apt-get install lua5.2-dev
+    sudo apt-get install -yq lua5.2-dev
